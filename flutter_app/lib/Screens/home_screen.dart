@@ -1,21 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Services/auth_services.dart';
-import 'login_screen.dart'; // Import your login screen file
+import 'login_screen.dart'; 
+import 'package:http/http.dart' as http;
+class Globals {
+  static String? authToken;
+}
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  void _logout(BuildContext context) {
-    // Implement logout functionality here
-    // For example, clear user session, remove tokens, etc.
-    // Navigate back to the login screen
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-      (Route<dynamic> route) => false,
-    );
-  }
+  Future<void> _logout(BuildContext context) async {
+    // Fetch the authentication token from wherever it's stored
+    String? authToken = Globals.authToken; // Assuming authToken is stored globally, replace this with your actual logic
 
+    if (authToken != null) {
+      // Call the logout function from AuthServices
+      http.Response response = await AuthServices.logout(authToken);
+
+      if (response.statusCode == 200) {
+        // Logout successful, navigate to login screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      } else {
+        // Handle error here
+        print('Logout failed: ${response.statusCode}');
+        // You can show an error message or handle the error in any other way
+      }
+    } else {
+      // Handle case where authToken is null
+      print('Authentication token is null');
+      // You can show an error message or handle the case in any other way
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,28 +53,15 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Welcome to the Pizza Ordering App',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text('News Content'),
             SizedBox(height: 20),
-            ElevatedButton.icon(
+            ElevatedButton(
               onPressed: () {
                 // Add logic to navigate to the pizza order screen
                 // For example:
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => PizzaOrderScreen()));
               },
-              icon: Icon(Icons.local_pizza),
-              label: Text('Order Pizza'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+              child: Text('Order Pizza'),
             ),
           ],
         ),

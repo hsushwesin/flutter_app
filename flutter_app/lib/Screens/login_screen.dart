@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Services/auth_services.dart';
 import 'package:flutter_app/Services/globals.dart';
-import 'package:flutter_app/rounded_button.dart';
 import 'package:http/http.dart' as http;
 
 import 'home_screen.dart';

@@ -37,4 +37,16 @@ class AuthServices {
     print(response.body);
     return response;
   }
+
+  static Future<http.Response> logout(String? authToken) async {
+    var url = Uri.parse(baseURL + 'auth/logout');
+    http.Response response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $authToken', 
+      },
+    );
+    return response;
+  }
+
 }

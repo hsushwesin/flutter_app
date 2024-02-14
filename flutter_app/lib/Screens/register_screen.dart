@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../rounded_button.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.cyan,
         centerTitle: true,
         elevation: 0,
         title: const Text(
@@ -26,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: Colors.white
           ),
         ),
       ),
@@ -77,6 +79,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(
               height: 40,
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const LoginScreen(),
+                    ));
+              },
+              child: const Text(
+                'already have an account',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            )
           ],
         ),
       ),

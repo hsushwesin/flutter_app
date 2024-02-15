@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 
-class AuthControler extends Controller
+class AuthController extends Controller
 {
     public function register(Request $req)
     {
-        //valdiate
         $rules = [
             'name' => 'required|string',
             'email' => 'required|string|unique:users',
@@ -22,7 +22,7 @@ class AuthControler extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-        //create new user in users table
+
         $user = User::create([
             'name' => $req->name,
             'email' => $req->email,
@@ -35,15 +35,14 @@ class AuthControler extends Controller
 
     public function login(Request $req)
     {
-        // validate inputs
         $rules = [
             'email' => 'required',
             'password' => 'required|string'
         ];
         $req->validate($rules);
-        // find user email in users table
+
         $user = User::where('email', $req->email)->first();
-        // if user email found and password is correct
+
         if ($user && Hash::check($req->password, $user->password)) {
             $token = $user->createToken('Personal Access Token')->plainTextToken;
             $response = ['user' => $user, 'token' => $token];
@@ -52,4 +51,15 @@ class AuthControler extends Controller
         $response = ['message' => 'Incorrect email or password'];
         return response()->json($response, 400);
     }
+
+
+public function logout(Request $request)
+{
+    if (Auth::check()) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    return response()->json(['message' => 'User not authenticated'], 401);
+}
 }

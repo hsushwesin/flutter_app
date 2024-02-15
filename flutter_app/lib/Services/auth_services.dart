@@ -37,4 +37,14 @@ class AuthServices {
     print(response.body);
     return response;
   }
+  
+  static Future<http.Response> logout() async {
+    var url = Uri.parse(baseURL + 'auth/logout');
+    http.Response response = await http.post(
+      url,
+      headers: headers,
+    );
+    print(response.body);
+    return response;
+  }
 }

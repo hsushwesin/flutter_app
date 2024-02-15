@@ -11,6 +11,26 @@ class Globals {
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  
+  Future<void> _logout(BuildContext context) async {
+    // Call the logout function from AuthServices
+    final response = await AuthServices.logout();
+    if (response.statusCode == 200) {
+      // Clear the authentication token
+      Globals.authToken = null;
+      // Navigate back to the login screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    } else {
+      // Handle logout error
+      // You can show a snack bar with an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Logout failed')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +41,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // _logout(context); // Call the logout function when IconButton is pressed
+              _logout(context); // Call the logout function when IconButton is pressed
             },
             icon: const Icon(Icons.logout),
           ),
